@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO.Ports;
 using System.Windows.Forms;
 using OpenCvSharp;
 
@@ -16,9 +10,20 @@ namespace capture
 
         private Mat _flame;
 
+        private void scanCOMPorts()
+        {
+            combox.Items.Clear();
+            string[] ports = SerialPort.GetPortNames();
+            foreach (string p in ports)
+            {
+                combox.Items.Add(p);
+            }
+        }
+
         public Form1()
         {
             InitializeComponent();
+            scanCOMPorts();
         }
 
 
@@ -29,7 +34,7 @@ namespace capture
             var capture = new VideoCapture();
 
             //カメラの起動　
-            capture.Open(0); //change by cameras
+            capture.Open(1); //change by cameras
 
             //画像取得用のMatを作成
             _flame = new Mat();
@@ -63,6 +68,13 @@ namespace capture
                 {
                     m = m / n;
                     label1.Text = m.ToString();// 0~640
+                    if(m <= 200)
+                    {
+                        serialPort1.Write("r\r\n");
+                    }
+                    else if(m <= 440){
+                        serialPort1.Write("l\r\n");
+                    }
                 }
 
                 Cv2.ImShow("Capture", mat);
@@ -75,9 +87,25 @@ namespace capture
 
             }
             Cv2.DestroyWindow("Capture");
-
         }
 
+        private void rescanbtn_Click(object sender, EventArgs e)
+        {
+            scanCOMPorts();
+        }
+
+        private void openbtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                serialPort1.PortName = combox.Text; // COM名設定
+                serialPort1.Open();                     // ポート接続
+            }
+            catch
+            {
+                serialPort1.Close();     // 切断ボタンを押す
+            }
+        }
     }
 }  
 

@@ -1,31 +1,3 @@
-/*#define SIG_PIN 2 // D1
-
-void setup() {
-  Serial.begin(115200);
-  pinMode(SIG_PIN, OUTPUT);
-  digitalWrite(SIG_PIN, LOW);
-  delay(2);
-}
-
-
-
-void loop() {
- for(int i =0;i<1900;i+=3){
-  servo(i);
- }
-}
-
-void servo(int kdeg){
-  if(kdeg<1900){
-    //int duration_H = 2400; // (2.4ms - 0.5ms) / 2 + 0.5ms
-    int duration_L = 20000 - kdeg; // 20ms - 1.45ms
-    digitalWrite(SIG_PIN, HIGH);
-    delayMicroseconds(kdeg);
-    digitalWrite(SIG_PIN, LOW);
-    delayMicroseconds(duration_L);
-}
-  }*/
-
 #include <Stepper.h> 
  
 #define MOTOR_PIN1 5  // 使用するモータのpin 
@@ -42,8 +14,7 @@ int rpm = 15; // 1-15rpmでないと動かない
 // モータに与えるステップ数 
 int Steps = 512; // 90度回転. 360deg : 90deg = 2048 : 512 
  
-// ライブラリとモータ配線の整合性を取り, C1, C2を入れ替える 
-// ref https://github.com/arduino-libraries/Stepper/blob/master/src/Stepper.cpp 
+
 Stepper myStepper(StepsPerRotate, MOTOR_PIN1, MOTOR_PIN3, MOTOR_PIN2, MOTOR_PIN4); 
  
 void setup() { 
@@ -52,9 +23,33 @@ void setup() {
 } 
  
 void loop() { 
-  // ステッピングモータを回転 
-  Serial.println("Rotate"); 
-  myStepper.step(Steps); 
-  delay(500); 
-  Serial.println(); 
+
+    char key;     // 受信データを格納するchar型の変数
+
+  // 受信データがあった時だけ、処理を行う
+  if ( Serial.available() ) {       // 受信データがあるか？
+    key = Serial.read();            // 1文字だけ読み込む
+//    Serial.write( key );            // 1文字送信。受信データをそのまま送り返す。
+
+    // keyの文字に応じて、行う処理を切り替える
+    switch( key ) {
+      // rキーが押された時の処理
+      case 'r':
+          myStepper.step(85); //15deg
+          delay(500);
+        break;
+
+      // lキーが押された時の処理
+      case 'l':          
+          myStepper.step(-85); //-15deg
+          delay(500);
+        break;
+
+      // 上記以外の場合の処理(何もしない)
+      default:
+        break;
+    } //switch文の末尾
+
+  } // if文の末尾
+ 
 }
