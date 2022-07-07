@@ -9,6 +9,8 @@ namespace capture
     {
 
         private Mat _flame;
+        public int k = 1;
+        public char str;
 
         private void scanCOMPorts()
         {
@@ -34,7 +36,7 @@ namespace capture
             var capture = new VideoCapture();
 
             //カメラの起動　
-            capture.Open(1); //change by cameras
+            capture.Open(0); //change by cameras
 
             //画像取得用のMatを作成
             _flame = new Mat();
@@ -68,12 +70,15 @@ namespace capture
                 {
                     m = m / n;
                     label1.Text = m.ToString();// 0~640
-                    if(m <= 200)
+                    if(m <= 200 && k == 1)
                     {
                         serialPort1.Write("r\r\n");
+                        k = 0;
                     }
-                    else if(m <= 440){
+                    else if(440 <= m && k == 1)
+                    {
                         serialPort1.Write("l\r\n");
+                        k = 0;
                     }
                 }
 
@@ -105,6 +110,29 @@ namespace capture
             {
                 serialPort1.Close();     // 切断ボタンを押す
             }
+        }
+
+        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            str = (char)serialPort1.ReadChar();
+            this.Invoke(new EventHandler(moved));
+        }
+        private void moved(object sender, EventArgs e)
+        {
+            if(str == 'e') { 
+                k = 1;
+                str = 'n';
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            k = 1;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            k = 1;
         }
     }
 }  

@@ -37,19 +37,22 @@ void loop() {
       case 'r':
           myStepper.step(85); //15deg
           delay(500);
+          while (Serial.available())Serial.read();
+          Serial.println('e');
         break;
 
       // lキーが押された時の処理
       case 'l':          
           myStepper.step(-85); //-15deg
           delay(500);
+          while (Serial.available())Serial.read();
+          Serial.println('e');
         break;
 
       // 上記以外の場合の処理(何もしない)
       default:
         break;
     } //switch文の末尾
-
   } // if文の末尾
- 
+
 }
