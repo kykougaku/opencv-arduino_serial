@@ -36,7 +36,7 @@ namespace capture
             var capture = new VideoCapture();
 
             //カメラの起動　
-            capture.Open(0); //change by cameras
+            capture.Open(1); //change by cameras
 
             //画像取得用のMatを作成
             _flame = new Mat();
@@ -57,7 +57,9 @@ namespace capture
                 // 分類機の用意
                 using (CascadeClassifier cascade = new CascadeClassifier(@"C:\opencv\sources\data\haarcascades\haarcascade_frontalface_default.xml"))
                 {
-                    foreach (Rect rectFace in cascade.DetectMultiScale(mat))
+                    Mat gray = new Mat();
+                    Cv2.CvtColor(mat,gray, ColorConversionCodes.RGB2GRAY);
+                    foreach (Rect rectFace in cascade.DetectMultiScale(gray, 1.1, 8))
                     {
                         n++;
                         // 見つかった場所に赤枠を表示
@@ -70,14 +72,14 @@ namespace capture
                 {
                     m = m / n;
                     label1.Text = m.ToString();// 0~640
-                    if(m <= 200 && k == 1)
-                    {
-                        serialPort1.Write("r\r\n");
-                        k = 0;
-                    }
-                    else if(440 <= m && k == 1)
+                    if(m <= 230 && k == 1)
                     {
                         serialPort1.Write("l\r\n");
+                        k = 0;
+                    }
+                    else if(410 <= m && k == 1)
+                    {
+                        serialPort1.Write("r\r\n");
                         k = 0;
                     }
                 }
