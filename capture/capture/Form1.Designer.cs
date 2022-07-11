@@ -35,15 +35,14 @@
             this.combox = new System.Windows.Forms.ComboBox();
             this.openbtn = new System.Windows.Forms.Button();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-            this.button2 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(313, 155);
+            this.button1.Location = new System.Drawing.Point(280, 160);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(96, 52);
+            this.button1.Size = new System.Drawing.Size(173, 52);
             this.button1.TabIndex = 0;
             this.button1.Text = "Start!";
             this.button1.UseVisualStyleBackColor = true;
@@ -91,16 +90,6 @@
             // 
             this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(104, 155);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 52);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Reset";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // timer1
             // 
             this.timer1.Enabled = true;
@@ -112,7 +101,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(704, 242);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.openbtn);
             this.Controls.Add(this.combox);
             this.Controls.Add(this.rescanbtn);
@@ -133,7 +121,6 @@
         private System.Windows.Forms.ComboBox combox;
         private System.Windows.Forms.Button openbtn;
         private System.IO.Ports.SerialPort serialPort1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Timer timer1;
     }
 }
