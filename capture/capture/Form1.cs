@@ -90,6 +90,10 @@ namespace capture
                         serialPort1.Write("l\r\n");
                         k = 0;
                     }
+                    else if(230<m && m<410)
+                    {
+                        Cv2.ImWrite(@"C:\testimage\image.jpg", mat);//中心に捉えたら画像を保存
+                    }
                     else if(410 <= m && k == 1)
                     {
                         serialPort1.Write("r\r\n");
